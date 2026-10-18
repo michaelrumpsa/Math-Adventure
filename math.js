@@ -31,7 +31,8 @@ function column(p,i){const place=10**i,a=Math.floor(p.a/place)%10,b=Math.floor(p
  return {a,b,carry,total,digit:Math.floor(answer(p)/place)%10};
 }
 function needsElevator(p){return p.op==='−'&&Array.from({length:width(p)},(_,i)=>column(p,i).total<0).some(Boolean);}
-function friendlyChange(p,limit=100){for(let k=1;k<=limit;k++){const q={a:p.a+k,b:p.b+k,op:'−'};if(q.b%10===0&&!needsElevator(q))return k;}return null;}
+function friendlyChange(p,limit=100){if(p.op!=='−')return null;for(let n=1;n<=limit;n++)for(const k of [-n,n]){const q={a:p.a+k,b:p.b+k,op:'−'};if(q.a>=0&&q.b>=0&&q.b%10===0&&!needsElevator(q))return k;}return null;}
+
 function enterDigit(p,digits,index,value){
  const out=Array.from({length:width(p)},(_,i)=>/^\d$/.test(digits[i]??'')?digits[i]:'');
  if(!Number.isInteger(index)||index<0||index>=out.length||!/^\d?$/.test(value))return {digits:out,ok:false,next:0,complete:false};
